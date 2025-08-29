@@ -1,6 +1,12 @@
 spring:
   application:
     name: file-upload-project
+servlet:
+  multipart:
+    enable: true
+    file-size-threshold: 0B
+    max-file-size: 100MB
+    max-request-size: 100MB
 
 cloud:
   aws:
