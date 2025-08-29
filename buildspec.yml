@@ -8,9 +8,9 @@ phases:
     commands:
       - echo Build completed on `date`
 
-  artifacts:
-    files:
-      - build/libs/*.jar
-      - Procfile
-      - .ebextensions/**/*
-    name: file-upload-project
+artifacts:
+  files:
+    - build/libs/*.jar
+    - Procfile
+    - .ebextensions/**/*
+  name: file-upload-project
