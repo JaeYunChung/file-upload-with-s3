@@ -5,19 +5,20 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController("multipart-file")
+@RestController
+@RequestMapping("/multipart-file")
 @RequiredArgsConstructor
 public class FileUploadController {
 
     private final AmazonS3Client amazonS3Client;
 
-    @PostMapping("upload")
+    @PostMapping("/upload")
     public String uploadMultifile(
         @RequestPart MultipartFile file
     ) throws IOException {
@@ -32,6 +33,6 @@ public class FileUploadController {
             metadata
         );
         amazonS3Client.putObject(putObjectRequest);
-        return amazonS3Client.getUrl("image-bucket", originalFilename).toString();
+        return amazonS3Client.getUrl("image-bucket-v2", originalFilename).toString();
     }
 }
