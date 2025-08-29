@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: file-upload-project
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${CLOUD_AWS_CREDENTIALS_ACCESS-KEY}
+      secret-key: ${CLOUD_AWS_CREDENTIALS_SECRET-KEY}
+    region:
+      static: ${CLOUD_AWS_REGION_STATIC}
