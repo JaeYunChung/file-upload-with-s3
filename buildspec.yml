@@ -1,5 +1,16 @@
 version: 1.0
 
 phases:
-  pre_build:
-    comma
+  build:
+    commands:
+      - ./gradlew clean build -x test
+  post_build:
+    commands:
+      - echo Build completed on `date`
+
+  artifacts:
+    files:
+      - build/libs/*.jar
+      - Procfile
+      - .ebextensions/**/*
+    name: file-upload-project
