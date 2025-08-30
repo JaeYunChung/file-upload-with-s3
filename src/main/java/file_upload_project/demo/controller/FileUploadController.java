@@ -1,8 +1,5 @@
 package file_upload_project.demo.controller;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,29 +7,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @RestController
 @RequestMapping("/multipart-file")
 @RequiredArgsConstructor
 public class FileUploadController {
 
-    private final AmazonS3Client amazonS3Client;
+    private final S3Client s3Client;
 
     @PostMapping("/upload")
     public String uploadMultifile(
         @RequestPart MultipartFile file
     ) throws IOException {
         String originalFilename = file.getOriginalFilename();
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(file.getContentType());
-        metadata.setContentLength(file.getSize());
-        PutObjectRequest putObjectRequest = new PutObjectRequest(
-            "image-bucket-v2",
-            originalFilename,
-            file.getInputStream(),
-            metadata
-        );
-        amazonS3Client.putObject(putObjectRequest);
-        return amazonS3Client.getUrl("image-bucket-v2", originalFilename).toString();
+        String bucketName = "image-bucket-v2";
+        
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+            .bucket(bucketName)
+            .key(originalFilename)
+            .contentType(file.getContentType())
+            .contentLength(file.getSize())
+            .build();
+            
+        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        
+        return String.format("https://%s.s3.amazonaws.com/%s", bucketName, originalFilename);
     }
 }
