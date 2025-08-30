@@ -11,7 +11,7 @@ servlet:
 cloud:
   aws:
     credentials:
-      access-key: ${CLOUD_AWS_CREDENTIALS_ACCESS-KEY}
-      secret-key: ${CLOUD_AWS_CREDENTIALS_SECRET-KEY}
+      access-key: ${ACCESSKEY}
+      secret-key: ${SECRETKEY}
     region:
-      static: ${CLOUD_AWS_REGION_STATIC}
+      static: ${REGION}
